@@ -1,18 +1,54 @@
 #ass6setbq1 slip2q2
 # write python program to implement k- means algorithm on a synthetic dataset
-import seaborn as sns
+# importing necessary libraries
+
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.datasets import make_blobs
-data = make_blobs(n_samples=300, n_features=2, centers=5, cluster_std=1.8,random_state=101)
-data[0].shape
-data[1]
-plt.scatter(data[0][:,0],data[0][:,1],c=data[1],cmap='brg')
-from sklearn.cluster import KMeans
-kmeans=KMeans(n_clusters=5)
-kmeans.fit(data[0])
-kmeans.cluster_centers_
-kmeans.labels_f,(ax1,ax2)=plt.subplots(1,2,sharey=True,figsize=(10,6))
-ax1.set_title('K Means')
-ax1.scatter(data[0][:,0],data[0][:,1],c=kmeans.labels_,cmap='brg')
-ax2.set_title("Original")
-ax2.scatter(data[0][:,0],data[0][:,1],c=data[1],cmap='brg')
+
+# generating random data points
+x, y = make_blobs(n_samples=100, centers=3, n_features=2)
+
+# plotting the generated data points
+plt.scatter(x[:, 0], x[:, 1], c=y, cmap='gist_rainbow')
+plt.show()
+# implementing K-Means
+k = 3
+
+# assigning random centers
+center = 10*np.random.rand(k, 2)
+# computing the distance matrix
+dist_matrix = np.zeros((100, 3))
+
+for i in range(k):
+ dist_matrix[:,i] = np.sum((x-center[i, :])**2, axis=1)
+
+# assigning labels to each data point
+cluster_labels = np.argmin(dist_matrix, axis=1)
+
+# plotting the labeled data points
+plt.scatter(x[:, 0], x[:, 1], c=cluster_labels, cmap='gist_rainbow')
+plt.show()
+
+# updating the cluster centers
+for i in range(k):
+ center[i, :] = np.mean(x[cluster_labels == i, :], axis=0)
+
+# recomputing the distance matrix
+dist_matrix = np.zeros((100, 3))
+
+for i in range(k):
+ center[i, :] = np.mean(x[cluster_labels == i, :], axis=0)
+
+# recomputing the distance matrix
+dist_matrix = np.zeros((100, 3))
+
+for i in range(k):
+ dist_matrix[:,i] = np.sum((x-center[i, :])**2, axis=1)
+
+# reassigning labels to each data point
+cluster_labels = np.argmin(dist_matrix, axis=1)
+
+# plotting the labeled data points
+plt.scatter(x[:, 0], x[:, 1], c=cluster_labels, cmap='gist_rainbow')
+plt.show()
